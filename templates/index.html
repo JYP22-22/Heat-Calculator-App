@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Duty Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 40px; }
+        .container { max-width: 500px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { background-color: #ff69b4; color: white; padding: 10px; text-align: center; margin-top: 0; border-radius: 4px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="number"] { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .results { margin-top: 20px; padding: 15px; background-color: #eef2f7; border-left: 5px solid #2196F3; }
+        .status-safe { color: green; font-weight: bold; }
+        .status-warning { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>HEAT DUTY CALCULATOR</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label>Mass Flow Rate (m) [kg/s]</label>
+            <input type="number" step="any" name="mass_flow" value="{{ inputs.mass_flow }}" required>
+        </div>
+        <div class="form-group">
+            <label>Specific Heat Capacity (Cp) [kJ/kg·°C]</label>
+            <input type="number" step="any" name="cp" value="{{ inputs.cp }}" required>
+        </div>
+        <div class="form-group">
+            <label>Inlet Temperature (Tin) [°C]</label>
+            <input type="number" step="any" name="t_in" value="{{ inputs.t_in }}" required>
+        </div>
+        <div class="form-group">
+            <label>Outlet Temperature (Tout) [°C]</label>
+            <input type="number" step="any" name="t_out" value="{{ inputs.t_out }}" required>
+        </div>
+        <div class="form-group">
+            <label>Fluid Boiling Point [°C]</label>
+            <input type="number" step="any" name="boiling_point" value="{{ inputs.boiling_point }}" required>
+        </div>
+        <button type="submit">Calculate Required Heat Duty</button>
+    </form>
+
+    {% if result is not none %}
+    <div class="results">
+        <p><strong>Required Heat Duty (Q):</strong> {{ result }} kW</p>
+        <p><strong>System Status:</strong> 
+            <span class="{% if 'CRITICAL' in system_status %}status-warning{% else %}status-safe{% endif %}">
+                {{ system_status }}
+            </span>
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
